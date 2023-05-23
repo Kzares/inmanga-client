@@ -68,7 +68,7 @@ const searchManga = async () => {
 
     if (mangas.activeFilter) {
         if (category.value === 'top-rated' || category.value === 'most-popular') {
-            await axios.post(`https://149.100.154.239:5000/api/users/top-rated?start=${pagination.start}&end=${pagination.end}`, {
+            await axios.post(`https://bakteria.online:5000:5000/api/users/top-rated?start=${pagination.start}&end=${pagination.end}`, {
                 hidden: user.hidden
             })
                 .then((response) => {
@@ -85,7 +85,7 @@ const searchManga = async () => {
                 })
         } else {
             //No filter request
-            await axios.post(`https://149.100.154.239:5000/api/users/category/${category.value}?start=${pagination.start}&end=${pagination.end}`, {
+            await axios.post(`https://bakteria.online:5000:5000/api/users/category/${category.value}?start=${pagination.start}&end=${pagination.end}`, {
                 hidden: user.hidden
             })
                 .then((response) => {
@@ -104,7 +104,7 @@ const searchManga = async () => {
         }
     } else {
         if (category.value === 'top-rated' || category.value === 'most-popular') {
-            await axios.get(`https://149.100.154.239:5000/api/mangas/${category.value}?start=${pagination.start}&end=${pagination.end}`)
+            await axios.get(`https://bakteria.online:5000:5000/api/mangas/${category.value}?start=${pagination.start}&end=${pagination.end}`)
                 .then((response) => {
                     mangas.notFilter = response.data
                     if (!mangas.searchReplaces) {
@@ -118,7 +118,7 @@ const searchManga = async () => {
                 })
         } else {
             //No filter request
-            await axios.get(`https://149.100.154.239:5000/api/mangas/category/${category.value}?start=${pagination.start}&end=${pagination.end}`)
+            await axios.get(`https://bakteria.online:5000:5000/api/mangas/category/${category.value}?start=${pagination.start}&end=${pagination.end}`)
                 .then((response) => {
                     //establecer los mangas como arreglos temporales
                     mangas.notFilter = response.data

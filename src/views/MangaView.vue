@@ -36,7 +36,7 @@ onBeforeMount(() => {
 })
 //methods 
 const getManga = async () => {
-    await axios.get(`https://149.100.154.239:5000/api/mangas/${route.params.id}`)
+    await axios.get(`https://bakteria.online:5000:5000/api/mangas/${route.params.id}`)
         .then((response) => {
             manga.value = response.data
             const newDate = new Date(response.data.released)
@@ -68,7 +68,7 @@ const getManga = async () => {
             console.log(manga.value.categories)
 
         })
-    await axios.get(`https://149.100.154.239:5000/api/mangas/increase-score/${route.params.id}`)
+    await axios.get(`https://bakteria.online:5000:5000/api/mangas/increase-score/${route.params.id}`)
 
     calcStars()
 }
@@ -128,7 +128,7 @@ const likeManga = () => {
         <main>
 
             <div class="image">
-                <img :src="`https://149.100.154.239:5000/download/${manga.id}.jpg`" alt="">
+                <img :src="`https://bakteria.online:5000:5000/download/${manga.id}.jpg`" alt="">
             </div>
 
             <div class="content">

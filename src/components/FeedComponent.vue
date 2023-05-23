@@ -20,13 +20,13 @@ onBeforeMount(() => {
 
 //methods 
 const getTopRatedMangas = async () => {
-  await axios.get(`https://149.100.154.239:5000/api/mangas/top-rated`)
+  await axios.get(`https://bakteria.online:5000:5000/api/mangas/top-rated`)
     .then((response) => mangas.rated = response.data)
 
 }
 
 const getMostPopularMangas = async () => {
-  await axios.get(`https://149.100.154.239:5000/api/mangas/most-popular`)
+  await axios.get(`https://bakteria.online:5000:5000/api/mangas/most-popular`)
     .then((response) => mangas.popular = response.data)
 
 }

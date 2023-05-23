@@ -31,7 +31,7 @@ const state = reactive({
 
 const submitForm  = () => {
   loader.value = true
-    axios.post(`https://bakteria.online:5000:5000/api/users/login-admin`, {
+    axios.post(`https://bakteria.online:5000/api/users/login-admin`, {
       username: state.username,
       password: state.password
     } )

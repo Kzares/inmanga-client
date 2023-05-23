@@ -54,12 +54,12 @@ onBeforeMount(() => {
 })
 onBeforeMount(async () => {
 
-    await axios.get(`https://bakteria.online:5000:5000/api/mangas/category/get-all`)
+    await axios.get(`https://bakteria.online:5000/api/mangas/category/get-all`)
         .then(response => categories.categoriesArray = response.data)
 
     if (props.isEdit) {
         loader.value = true
-        await axios.get(`https://bakteria.online:5000:5000/api/mangas/${route.params.id}`)
+        await axios.get(`https://bakteria.online:5000/api/mangas/${route.params.id}`)
             .then(({ data }) => {
                 state.id = data.id
                 state.title = data.title
@@ -104,7 +104,7 @@ const uploadImage = (id) => {
     const formData = new FormData()
     formData.append('file', selectedFile.value, selectedFile.value.name) // especifica 'file' como nombre del campo donde se incluye la imagen
     const filename = id + '.jpg' // no es necesario enviar el nombre en la URL
-    axios.post(`https://bakteria.online:5000:5000/image/${filename}`, formData, {
+    axios.post(`https://bakteria.online:5000/image/${filename}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data' // especifica el tipo de contenido para el servidor pueda interpretar los datos recibidos
         }
@@ -127,7 +127,7 @@ const uploadImage = (id) => {
 const submitData = async () => {
     loader.value = true
     if (props.isEdit) {
-        axios.put(`https://bakteria.online:5000:5000/api/mangas/edit/${route.params.id}`, {
+        axios.put(`https://bakteria.online:5000/api/mangas/edit/${route.params.id}`, {
             title: state.title,
             author: state.author,
             released: state.date,
@@ -155,7 +155,7 @@ const submitData = async () => {
             return
         }
 
-        axios.post(`https://bakteria.online:5000:5000/api/mangas/add`, {
+        axios.post(`https://bakteria.online:5000/api/mangas/add`, {
             title: state.title,
             author: state.author,
             released: state.date,
@@ -219,7 +219,7 @@ const closeModal = () => {
                     <img :src="imageUrl" alt="">
                 </label>
                 <label for="fileInput" v-else>
-                    <img v-if="isEdit" :src="`https://bakteria.online:5000:5000/download/${state.id}.jpg`" alt="">
+                    <img v-if="isEdit" :src="`https://bakteria.online:5000/download/${state.id}.jpg`" alt="">
                 </label>
 
 

@@ -38,14 +38,14 @@ const searchManga = async () => {
     mangas.value = []
     isSearch.value = false
     if (type.value === 'name') {
-        await axios.get(`http://149.100.154.239:5000/api/mangas/search/${search.value.toLocaleLowerCase()}`)
+        await axios.get(`https://149.100.154.239:5000/api/mangas/search/${search.value.toLocaleLowerCase()}`)
             .then((response) => {
                 mangas.value = response.data
                 isSearch.value = true
                 console.log(isSearch.value)
             })
     } else {
-        await axios.get(`http://149.100.154.239:5000/api/mangas/search-author/${search.value.toLocaleLowerCase()}`)
+        await axios.get(`https://149.100.154.239:5000/api/mangas/search-author/${search.value.toLocaleLowerCase()}`)
             .then((response) => {
                 mangas.value = response.data
                 isSearch.value = true

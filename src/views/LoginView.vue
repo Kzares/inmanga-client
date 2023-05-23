@@ -55,7 +55,7 @@ const updateRoute = () => {
 const submitForm  = () => {
   loader.value = true
   if(type.value === 'login'){
-    axios.post(`http://149.100.154.239:5000/api/users/login`, {
+    axios.post(`https://149.100.154.239:5000/api/users/login`, {
       username: state.username,
       password: state.password
     } ).then((res) => {
@@ -74,7 +74,7 @@ const submitForm  = () => {
       console.log(e)
     })
   }else {
-    axios.post(`http://149.100.154.239:5000/api/users/register`, {
+    axios.post(`https://149.100.154.239:5000/api/users/register`, {
       username: state.username,
       password: state.password
     } ).then((res) => {

@@ -31,7 +31,7 @@ const state = reactive({
 
 const submitForm  = () => {
   loader.value = true
-    axios.post(`http://149.100.154.239:5000/api/users/login-admin`, {
+    axios.post(`https://149.100.154.239:5000/api/users/login-admin`, {
       username: state.username,
       password: state.password
     } )

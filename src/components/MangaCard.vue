@@ -137,7 +137,7 @@ const handleModal = (message) => {
 <template lang="">
     <div  class="manga-card">
        
-        <img @click="redirect" :src="`http://149.100.154.239:5000/download/${manga.id}.jpg`" alt="">
+        <img @click="redirect" :src="`https://149.100.154.239:5000/download/${manga.id}.jpg`" alt="">
         <div class="info">
 
           <div class="icons" v-if="vuexState.user.id" >

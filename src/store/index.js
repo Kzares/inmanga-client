@@ -12,7 +12,7 @@ export default createStore({
     //update user in database
     UPDATE_USER_SAVED(state){
      
-      axios.post(`http://149.100.154.239:5000/api/users/update-user/saved`, {
+      axios.post(`https://149.100.154.239:5000/api/users/update-user/saved`, {
         id: state.user.id,
         saved: state.user.saved
       })
@@ -20,7 +20,7 @@ export default createStore({
 
     },
     UPDATE_USER_HIDDEN(state){
-      axios.post(`http://149.100.154.239:5000/api/users/update-user/hidden`, {
+      axios.post(`https://149.100.154.239:5000/api/users/update-user/hidden`, {
         id: state.user.id,
         hidden: state.user.hidden
       })
@@ -28,7 +28,7 @@ export default createStore({
 
     },
     UPDATE_USER_LIKED(state){
-      axios.post(`http://149.100.154.239:5000/api/users/update-user/liked`, {
+      axios.post(`https://149.100.154.239:5000/api/users/update-user/liked`, {
         id: state.user.id,
         liked: state.user.liked
       })
@@ -62,13 +62,13 @@ export default createStore({
     //Update database mutations 
     LIKE_MANGA(state, id){
       console.log(state.user.id)
-      axios.get(`http://149.100.154.239:5000/api/mangas/like/${id}`)
+      axios.get(`https://149.100.154.239:5000/api/mangas/like/${id}`)
       .then(res => console.log(res.data))
       .catch(res => console.log(res.data) )
     },
     DISLIKE_MANGA(state,id){
       console.log(state.user.id)
-      axios.get(`http://149.100.154.239:5000/api/mangas/like/${id}?like=-1`)
+      axios.get(`https://149.100.154.239:5000/api/mangas/like/${id}?like=-1`)
       .then(res => console.log(res.data))
       .catch(res => console.log(res.data) )
     },

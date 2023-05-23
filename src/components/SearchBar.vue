@@ -16,7 +16,7 @@ const categories = ref([])
 
 //before mount function
 onBeforeMount(async () => {
-    await axios.get('http://149.100.154.239:5000/api/mangas/category/get-all')
+    await axios.get('https://149.100.154.239:5000/api/mangas/category/get-all')
         .then(response => categories.value = response.data)
 })
 

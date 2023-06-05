@@ -10,6 +10,7 @@ import LoginView from '../views/LoginView'
 import LoginAdminView from '../views/LoginAdminView'
 import HiddenView from '../views/HiddenView'
 import LibraryView from '../views/LibraryView'
+import DownloadView from '../views/DownloadView'
 
 const router = createRouter({
     history: createWebHistory('/'),
@@ -28,6 +29,12 @@ const router = createRouter({
             path: '/manga/:id',
             name: 'manga',
             component: MangaView
+        },
+        
+        {
+            path: '/manga/download/:id',
+            name: 'download',
+            component: DownloadView
         },
         
         {

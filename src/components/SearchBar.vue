@@ -16,7 +16,7 @@ const categories = ref([])
 
 //before mount function
 onBeforeMount(async () => {
-    await axios.get('https://bakteria.online:5000/api/mangas/category/get-all')
+    await axios.get('http://localhost:5000/api/mangas/category/get-all')
         .then(response => categories.value = response.data)
 })
 

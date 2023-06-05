@@ -25,7 +25,7 @@ onBeforeMount(() => {
 
 //methods 
 const getTopRatedMangas = async () => {
-    await axios.get(`https://bakteria.online:5000/api/mangas/top-rated`)
+    await axios.get(`http://localhost:5000/api/mangas/top-rated`)
         .then((response) => mangas.value = response.data)
 
 }
@@ -35,7 +35,7 @@ const getTopRatedMangas = async () => {
 const adminSearch = async (value) => {
     mangas.value = null
     isSearch.value = value
-    await axios.get(`https://bakteria.online:5000/api/mangas/search/${value.toLocaleLowerCase()}`)
+    await axios.get(`http://localhost:5000/api/mangas/search/${value.toLocaleLowerCase()}`)
         .then((response) => mangas.value = response.data)
 }
 

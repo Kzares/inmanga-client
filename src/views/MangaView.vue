@@ -1,11 +1,12 @@
 <script setup>
 import { ref, reactive, onBeforeMount } from 'vue'
 import axios from 'axios'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { BsStarFill } from "@kalimahapps/vue-icons";
 import { BsStarHalf } from "@kalimahapps/vue-icons";
 import { BsStar } from "@kalimahapps/vue-icons";
+import { AkCloudDownload } from "@kalimahapps/vue-icons";
 import { BxBookAdd, BxSolidShow, CoFolderRemove, BxSolidHide, AkHeart, AnFilledHeart } from "@kalimahapps/vue-icons";
 import LoaderComponent from '@/components/LoaderComponent.vue'
 
@@ -16,6 +17,7 @@ const dispatch = store.dispatch
 
 //reactive variables
 const route = useRoute()
+const router = useRouter()
 const manga = ref(null)
 const stars = reactive({
     filled: 0,
@@ -30,13 +32,10 @@ const state = reactive({
 //triggers function before mounts
 onBeforeMount(() => {
     getManga()
-
-
-
 })
 //methods 
 const getManga = async () => {
-    await axios.get(`https://bakteria.online:5000/api/mangas/${route.params.id}`)
+    await axios.get(`http://localhost:5000/api/mangas/${route.params.id}`)
         .then((response) => {
             manga.value = response.data
             const newDate = new Date(response.data.released)
@@ -68,7 +67,7 @@ const getManga = async () => {
             console.log(manga.value.categories)
 
         })
-    await axios.get(`https://bakteria.online:5000/api/mangas/increase-score/${route.params.id}`)
+    await axios.get(`http://localhost:5000/api/mangas/increase-score/${route.params.id}`)
 
     calcStars()
 }
@@ -116,6 +115,10 @@ const likeManga = () => {
     state.isLiked = !state.isLiked
 }
 
+const moveToDownload = () => {
+    router.push(`download/${route.params.id}`)
+}
+
 </script>
 
 <template>
@@ -128,7 +131,7 @@ const likeManga = () => {
         <main>
 
             <div class="image">
-                <img :src="`https://bakteria.online:5000/download/${manga.id}.jpg`" alt="">
+                <img :src="`http://localhost:5000/download/${manga.id}.jpg`" alt="">
             </div>
 
             <div class="content">
@@ -153,6 +156,10 @@ const likeManga = () => {
                     </div>
                     <div class="icon-container" @click="likeManga" v-else>
                         <AnFilledHeart class="icon fill" />
+                    </div>
+
+                    <div class="icon-container" @click="moveToDownload" >
+                        <AkCloudDownload class="icon" />
                     </div>
                 </div>
 
@@ -200,9 +207,13 @@ const likeManga = () => {
 
                 </div>
 
-                
-
-
+                <div class="download-container" @click="moveToDownload">
+                    <div class="download">
+                        <span>Download for free </span>
+                        <AkCloudDownload class="icon" />
+                    </div>
+                </div>
+            
             </div>
 
         </main>
@@ -279,6 +290,7 @@ const likeManga = () => {
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    cursor:pointer;
                     width: 35px;
                     height: 35px;
                     background-color: #fff;
@@ -386,6 +398,39 @@ const likeManga = () => {
                     font-size: .8rem;
                     color: #000;
                     cursor: pointer;
+                }
+            }
+
+            .download-container{
+
+                width: 100%;
+                justify-content: center;
+                align-items:center;
+                display: flex;
+                
+                .download{
+                    width:fit-content;
+                    display:flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap:1rem;
+                    margin-bottom: 2rem;
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -1px rgba(0, 0, 0, 0.16);
+                    padding:1.5rem;
+                    border-bottom-left-radius: 30px;
+                    border-top-right-radius: 30px;
+                    cursor:pointer;
+
+                    span{
+                        font-size:20px;
+                        font-weight: 200;
+                        color: #444;
+                    }
+
+                    .icon{
+                        font-size: 25px;
+                        color:#333;
+                    }
                 }
             }
 

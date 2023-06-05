@@ -79,7 +79,7 @@ const paginationMethod = (param) => {
 }
 //search in database method
 const searchManga = async () => {
-    await axios.post(`https://bakteria.online:5000/api/users/get-saved-mangas`, {
+    await axios.post(`http://localhost:5000/api/users/get-saved-mangas`, {
         mangas: mangasToSearch.value
     })
         .then((response) => {

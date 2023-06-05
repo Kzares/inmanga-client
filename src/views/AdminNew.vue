@@ -26,6 +26,11 @@ const categories = reactive({
 
 })
 
+const link = reactive({
+    name: '',
+    link: '',
+})
+
 const state = reactive({
     id: null,
     title: null,
@@ -34,7 +39,8 @@ const state = reactive({
     sinopsis: null,
     review: null,
     score: null,
-    categories: []
+    categories: [],
+    links: {}
 })
 //defining props
 const props = defineProps({
@@ -54,12 +60,12 @@ onBeforeMount(() => {
 })
 onBeforeMount(async () => {
 
-    await axios.get(`https://bakteria.online:5000/api/mangas/category/get-all`)
+    await axios.get(`http://localhost:5000/api/mangas/category/get-all`)
         .then(response => categories.categoriesArray = response.data)
 
     if (props.isEdit) {
         loader.value = true
-        await axios.get(`https://bakteria.online:5000/api/mangas/${route.params.id}`)
+        await axios.get(`http://localhost:5000/api/mangas/${route.params.id}`)
             .then(({ data }) => {
                 state.id = data.id
                 state.title = data.title
@@ -69,7 +75,6 @@ onBeforeMount(async () => {
                 state.score = data.score
                 state.categories = data.categories
 
-                console.log(data.categories)
                 loader.value = false
 
                 const date = new Date(data.released)
@@ -77,6 +82,13 @@ onBeforeMount(async () => {
 
                 state.date = converted_Date
 
+
+            })
+
+        //get download links 
+        await axios.get(`http://localhost:5000/api/mangas/manga-links/${route.params.id}`)
+            .then((response) => {
+                state.links = response.data
 
             })
     }
@@ -104,7 +116,7 @@ const uploadImage = (id) => {
     const formData = new FormData()
     formData.append('file', selectedFile.value, selectedFile.value.name) // especifica 'file' como nombre del campo donde se incluye la imagen
     const filename = id + '.jpg' // no es necesario enviar el nombre en la URL
-    axios.post(`https://bakteria.online:5000/image/${filename}`, formData, {
+    axios.post(`http://localhost:5000/image/${filename}`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data' // especifica el tipo de contenido para el servidor pueda interpretar los datos recibidos
         }
@@ -124,10 +136,28 @@ const uploadImage = (id) => {
         })
 }
 
+const uploadDownloadLinks = (id) => {
+    console.log(state.links)
+    const links = state.links
+    axios.put(`http://localhost:5000/api/mangas/edit/update_download_liks/${id}`, { links : links })
+        .then((data) => {
+            console.log(data.data)
+            if (selectedFile.value) {
+                uploadImage(id)
+            } else {
+                loader.value = false
+                modalMessage.value = 'Manga Updated Succesfully'
+                showModal.value = true
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
 const submitData = async () => {
     loader.value = true
     if (props.isEdit) {
-        axios.put(`https://bakteria.online:5000/api/mangas/edit/${route.params.id}`, {
+        axios.put(`http://localhost:5000/api/mangas/edit/${route.params.id}`, {
             title: state.title,
             author: state.author,
             released: state.date,
@@ -136,13 +166,7 @@ const submitData = async () => {
             score: state.score,
             categories: state.categories
         }).then((data) => {
-            if (selectedFile.value) {
-                uploadImage(data.data)
-            } else {
-                loader.value = false
-                modalMessage.value = 'Manga Updated Succesfully'
-                showModal.value = true
-            }
+            uploadDownloadLinks(data.data)
 
         })
             .catch(() => {
@@ -150,12 +174,12 @@ const submitData = async () => {
                 modalError.value = true
             })
     } else {
-        if( !selectedFile.value ) {
+        if (!selectedFile.value) {
             loader.value = false
             return
         }
 
-        axios.post(`https://bakteria.online:5000/api/mangas/add`, {
+        axios.post(`http://localhost:5000/api/mangas/add`, {
             title: state.title,
             author: state.author,
             released: state.date,
@@ -165,7 +189,7 @@ const submitData = async () => {
             categories: state.categories
         })
             .then((data) => {
-                uploadImage(data.data)
+                uploadDownloadLinks(data.data)
             })
             .catch(() => {
                 modalMessage.value = 'Unexpected error Ocurred'
@@ -177,6 +201,21 @@ const submitData = async () => {
 const addCategory = () => {
     state.categories.push(categories.typedCategory.toLocaleLowerCase())
     categories.typedCategory = ''
+}
+
+const addLink = () => {
+    if (link.name && link.link) {
+
+        state.links[`${link.link}`] = link.name
+
+        link.name = ''
+        link.link = ''
+    }
+
+}
+
+const deleteLink = (key) => {
+    delete state.links[key]
 }
 
 const addCategoryfromList = (e) => {
@@ -219,7 +258,7 @@ const closeModal = () => {
                     <img :src="imageUrl" alt="">
                 </label>
                 <label for="fileInput" v-else>
-                    <img v-if="isEdit" :src="`https://bakteria.online:5000/download/${state.id}.jpg`" alt="">
+                    <img v-if="isEdit" :src="`http://localhost:5000/download/${state.id}.jpg`" alt="">
                 </label>
 
 
@@ -270,6 +309,22 @@ const closeModal = () => {
                     <ul>
                         <li @click="addCategoryfromList" v-for="category, idx in categories.categoriesArray" :key="idx">
                             {{ category }} </li>
+                    </ul>
+                </div>
+
+                <span class="heading">Add a download link</span>
+
+                <div class="input input-link">
+                    <input type="text" v-model="link.name" placeholder="Title">
+                    <input type="text" v-model="link.link" placeholder="Download link">
+                    <button @click.prevent="addLink">Add</button>
+                </div>
+
+                <div class="links">
+                    <ul>
+                        <li @click="deleteLink(entry[0])" v-for="entry, idx  in Object.entries(state.links) " :key="idx">
+                            {{ entry[0] }} : {{ entry[1] }}
+                        </li>
                     </ul>
                 </div>
 
@@ -451,9 +506,8 @@ button {
     justify-content: center;
     align-items: center;
     margin-bottom: 8px;
-    box-shadow: 10px 10px 10px rgba(0, 0, 0, .4);
     border-radius: 5px;
-    background: #000;
+    gap: 15px;
 
     input,
     textarea {
@@ -482,6 +536,46 @@ button {
         height: 140px;
     }
 }
+
+
+.heading {
+    font-weight: 200;
+    font-size: 20px;
+    padding-bottom: 10px;
+}
+
+.links {
+    display: flex;
+    gap: 15px;
+    flex-direction: column;
+
+
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        padding-top: 1rem;
+
+        li {
+            list-style: none;
+            color: #444;
+            font-size: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            transition: all 400ms ease-in-out;
+            cursor: pointer;
+            align-items: center;
+            display: flex;
+            gap: 10px;
+
+            &:hover {
+                transform: scale(1.03);
+            }
+        }
+    }
+}
+
 
 .number {
     margin: 1.5rem auto;
@@ -527,5 +621,8 @@ button {
             }
         }
     }
-}
-</style>
+
+    .input-link {
+        flex-direction: column;
+    }
+}</style>
